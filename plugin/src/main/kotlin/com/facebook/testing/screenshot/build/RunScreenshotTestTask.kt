@@ -34,8 +34,8 @@ open class RunScreenshotTestTask : PullScreenshotsTask() {
     if (verify && extension.referenceDir != null) {
       return
     }
-
-    dependsOn(variant.connectedInstrumentTestProvider)
-    mustRunAfter(variant.connectedInstrumentTestProvider)
+//    TODO bring this back once marathon is set as `connectedInstrumentTest` task
+//    dependsOn(variant.connectedInstrumentTestProvider)
+//    mustRunAfter(variant.connectedInstrumentTestProvider)
   }
 }
