@@ -43,7 +43,8 @@ import org.xmlpull.v1.XmlSerializer;
 public class AlbumImpl implements Album {
   private static final int COMPRESSION_QUALITY = 90;
   private static final int BUFFER_SIZE = 1 << 16; // 64k
-  private static final String SCREENSHOT_BUNDLE_FILE_NAME = "screenshot_bundle.zip";
+  private static final String SCREENSHOT_BUNDLE_FILE_NAME =
+      "screenshot_bundle_" + System.currentTimeMillis() + ".zip";
 
   private final File mDir;
   private final Set<String> mAllNames = new HashSet<>();
@@ -324,7 +325,8 @@ public class AlbumImpl implements Album {
   }
 
   public File getMetadataFile() {
-    return new File(mDir, "metadata.xml");
+    String filename = "metadata_" + System.currentTimeMillis() + ".xml";
+    return new File(mDir, filename);
   }
 
   /**
