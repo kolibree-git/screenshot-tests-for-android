@@ -21,11 +21,19 @@ buildscript {
   repositories {
     jcenter()
     google()
+    maven {
+      url = kolibree_artifactory_url + "/libs-release"
+      credentials {
+        username kolibree_artifactory_username
+        password kolibree_artifactory_password
+      }
+    }
   }
 
   dependencies {
     classpath plugs.agp
     classpath plugs.versions
+    classpath "com.kolibree.gradle:kolibree-publisher:1.0.6"
   }
 }
 

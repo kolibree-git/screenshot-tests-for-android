@@ -1,3 +1,11 @@
+0.14.3-KOLIBREE
+------
+- Fix issue on Android 11 and save screenshots in Download directory
+
+0.14.2-KOLIBREE
+------
+- Add unique ID for each instrumentationTest run
+
 0.13.0 (Jul 8 2020)
 ------
 - Made accessibility node information optional
