@@ -22,6 +22,9 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
 import android.util.Xml;
+
+import com.facebook.testing.screenshot.ScreenshotRunner;
+
 import androidx.annotation.Nullable;
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -43,18 +46,27 @@ import org.xmlpull.v1.XmlSerializer;
 public class AlbumImpl implements Album {
   private static final int COMPRESSION_QUALITY = 90;
   private static final int BUFFER_SIZE = 1 << 16; // 64k
-  private static final String SCREENSHOT_BUNDLE_FILE_NAME =
-      "screenshot_bundle_" + System.currentTimeMillis() + ".zip";
+  private static final String SCREENSHOT_BUNDLE_BASE_NAME_FILE_NAME =
+      "screenshot_bundle";
+  private static final String SCREENSHOT_BUNDLE_FILE_EXTENSION =
+      ".zip";
 
   private final File mDir;
   private final Set<String> mAllNames = new HashSet<>();
   private ZipOutputStream mZipOutputStream;
   private XmlSerializer mXmlSerializer;
   private OutputStream mOutputStream;
+  private String uuid;
 
   /* VisibleForTesting */
   AlbumImpl(ScreenshotDirectories screenshotDirectories, String name) {
     mDir = screenshotDirectories.get(name);
+    boolean useUUID = Registry.getRegistry().arguments.getBoolean(ScreenshotRunner.UUID_ENABLED,false);
+    if (useUUID) {
+      uuid = "_" + System.currentTimeMillis();
+    } else {
+      uuid = "";
+    }
   }
 
   /** Creates a "local" album that stores all the images on device. */
@@ -62,10 +74,14 @@ public class AlbumImpl implements Album {
     return new AlbumImpl(new ScreenshotDirectories(context), name);
   }
 
+  private String getScreenshotBundleFileName() {
+    return SCREENSHOT_BUNDLE_BASE_NAME_FILE_NAME + uuid + SCREENSHOT_BUNDLE_FILE_EXTENSION;
+  }
+
   @SuppressLint("SetWorldReadable")
   private ZipOutputStream getOrCreateZipOutputStream() throws IOException {
     if (mZipOutputStream == null) {
-      File file = new File(mDir, SCREENSHOT_BUNDLE_FILE_NAME);
+      File file = new File(mDir, getScreenshotBundleFileName());
       file.createNewFile();
       file.setReadable(/* readable = */ true, /* ownerOnly = */ false);
       mZipOutputStream =
@@ -144,7 +160,7 @@ public class AlbumImpl implements Album {
       mZipOutputStream.close();
     }
 
-    File bundle = new File(mDir, SCREENSHOT_BUNDLE_FILE_NAME);
+    File bundle = new File(mDir, getScreenshotBundleFileName());
     if (!bundle.isFile()) {
       return null;
     }
@@ -325,7 +341,7 @@ public class AlbumImpl implements Album {
   }
 
   public File getMetadataFile() {
-    String filename = "metadata_" + System.currentTimeMillis() + ".xml";
+    String filename = "metadata" + uuid + ".xml";
     return new File(mDir, filename);
   }
 

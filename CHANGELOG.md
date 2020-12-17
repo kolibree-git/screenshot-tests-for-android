@@ -1,3 +1,7 @@
+0.14.4-KOLIBREE
+------
+- Add ability to enable/disable UUID
+
 0.14.3-KOLIBREE
 ------
 - Fix issue on Android 11 and save screenshots in Download directory
