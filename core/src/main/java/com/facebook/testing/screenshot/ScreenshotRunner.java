@@ -29,6 +29,8 @@ public abstract class ScreenshotRunner {
 
   /** These strings can be used as Keys to Bundle Arguments. */
   public static final String SDCARD_DIRECTORY = "sdcard_directory";
+  // This add a UUID to the generated files
+  public static final String UUID_ENABLED = "use_uuid_for_output";
 
   /**
    * Call this exactly once in your process before any screenshots are generated.
